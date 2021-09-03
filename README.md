@@ -7,6 +7,6 @@ This is training data images.
 Prediction images of test data.
 ![Figure_2](https://user-images.githubusercontent.com/85408006/131959447-2e8bd068-c05b-4e7f-9391-731d173a2e4a.png)
 
-Result:Confusion Matrix.
+Result: Confusion Matrix.
 ![Figure_3](https://user-images.githubusercontent.com/85408006/131959449-af4197c5-5339-4292-9d59-ab39ab9ecbcd.png)
 
