@@ -9,3 +9,6 @@ With optimized gamma  training ,validation and test accuracies were calculated.
 
 
 
+![Figure_1](https://user-images.githubusercontent.com/85408006/132831548-610ec60c-ad6d-4c32-a987-50505db64481.png)
+
+
