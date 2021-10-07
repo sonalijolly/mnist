@@ -5,54 +5,77 @@ from sklearn import datasets, svm, metrics
 from sklearn.model_selection import train_test_split
 import warnings
 from sklearn.exceptions import DataConversionWarning
-warnings.filterwarnings(action='ignore', category=DataConversionWarning)
+from skimage.transform import rescale, resize, downscale_local_mean
+from utils import create_split,rescale_resize,classfreport
+
+import sys
+import os
+import shutil
+from joblib import dump, load
+import numpy as np
+import math
+
+candidate_model =[]
+
 digits = datasets.load_digits()
-n_samples = len(digits.images)
-   
-data = digits.images.reshape((n_samples, -1))
+
+def model_score(model, X_val, y_val, gamma, sp, sh):
+    acc=model.score(X_val, y_val)
+    if acc < 0.11:
+        pass
+        print("Skip shape {} split {} gamma {}". format(sh,sp,gamma))
+    candidate = {
+        'acc' :   acc,
+        'gamma' : gamma,
+        'split' : sp,
+        'shape' : sh
+        }
+    candidate_model.append(candidate)
+
+def test(X,best_model_folder, shape,split):
+    data = rescale,output_resize(X, shape)
+    X_train, X_test, y_train, y_test, X_val, y_val = create_split(data, split)
+
+    clf = load(os.path.join(best_model_folder,"model.joblib"))
+    predicted = clf.predict(X_test)
+    classfreport(clf, y_test, predicted) # classification report function   
+
+mydir = "/home/sonali/MLops/mnist/models"
+if os.path.exists(mydir):
+    shutil.rmtree(mydir)
 X,Y = digits.images,digits.target 
-   
+split_parameter = [0.25, 0.5, 0.75]
+shape_parameter = [0.5, 1, 2, 4]
+gamma_parameter = [1e-7,1e-5,1e-3,0.01,0.1,1]
+
+for sh in shape_parameter:
+    for sp in split_parameter:
+        for gamma_p in gamma_parameter:
+            #data preprocessing for rescale and reshape
+            data = rescale_resize(X,sh)
+            #model creation
+            clf = svm.SVC(gamma=gamma_p)
+            # data split function
+            X_train, X_test, y_train, y_test, X_val, y_val = create_split(data, sp) 
+            #model training
+            #print(y_train.shape)
+            #y_train = y_train.reshape(-1,1)
+            clf.fit(X_train,y_train) 
+            #appending model candidates
+            model_score(clf, X_val, y_val, gamma_p, sp, sh)
+            output = "/home/sonali/MLops/mnist/models/"+"s_{}_tt_{}_gamma_{}".format(sh,sp,gamma_p)
+            #saving models 
+            os.makedirs(output)
+            dump(clf, os.path.join(output,"model.joblib"))
+#finding best model on accuracy
+best_model = max(candidate_model, key = lambda x: x['acc'])  
+
+#folder for best model
+bestmodel_shape=best_model["shape"]
+bestmodel_split=best_model["split"]
+bestmodel_gamma=best_model["gamma"]
+
+best_model_folder = "/home/sonali/MLops/mnist/models/s_{}_tt_{}_gamma_{}".format(bestmodel_shape,bestmodel_split,bestmodel_gamma)
 
 
-
-#accurcy list
-a=[]
-def testf(digits, params):
-   
-    clf = svm.SVC(gamma=params)
-    X_train, X_test, y_train, y_test = train_test_split(
-        data, digits.target, test_size=0.15, shuffle=False)
-    X_train, X_val, y_train, y_val = train_test_split(
-        data, digits.target, test_size=0.15, shuffle=False)
-   
-    clf.fit(X_train, y_train.reshape(-1,1))
-
-    acc = clf.score(X_val,y_val)
-    a.append(acc)
-    print("gamma-val_accuracy ",params,"--->",acc)
-
-#gamman values list
-gamma=[0.000001, 0.00001,0.0001,0.001,0.01,0.1,0.2,1]
-for i in gamma:
-    testf(digits,i)
-#finding best gamma values
-max_accuracy=max(a)
-#print(max_accuracy)
-optimized_gamma=gamma[a.index(max_accuracy)]
-print("Best gamma value", optimized_gamma)
-
-def acc(digits, params):
-    clf = svm.SVC(gamma=params)
-    X_train, X_test, y_train, y_test = train_test_split(
-        data, digits.target, test_size=0.15, shuffle=False)
-    X_train, X_val, y_train, y_val = train_test_split(
-        data, digits.target, test_size=0.15, shuffle=False)
-   
-    clf.fit(X_train, y_train.reshape(-1,1))
-    print("Test Accuracy --->",clf.score(X_train,y_train))
-    print("Validation Accuracy --->",clf.score(X_val,y_val))
-    print("Test Accuracy --->",clf.score(X_test,y_test))
-acc(digits,optimized_gamma)
-
-
-
+test(X,best_model_folder, bestmodel_shape,bestmodel_split)
