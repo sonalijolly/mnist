@@ -23,10 +23,20 @@ def test_small_data_overfit_checking():
  Solution:
  
  1.Small Data was fetched from dataset, only 100 images and targets.
+ 
+ 
  2.model was  created bu utils.modelcraetion function and returned.
+ 
+ 
  3.In test_utils(in tests folders) model was checked by  assert os.path.isfile(model_path+"/model.joblib")  for checking if created successfully.
+ 
+ 
  4.For second part, small amount of data was taken and was trained for 1000 iterations.
+ 
+ 
  5.accuracy and f1 score was printed with help of utils.run_classification_experiemnt.
+ 
+ 
  6.TRain accuaracy was higher than test because of over fitting.
  
  Screnshhot for pytest:
