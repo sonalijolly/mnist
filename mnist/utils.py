@@ -11,10 +11,11 @@ digits = datasets.load_digits()
 
 def create_split(data,y, sp):
         X_train, X_test, y_train, y_test = train_test_split(
-        data, y, test_size=sp, shuffle=False)
-        X_train, X_val, y_train, y_val = train_test_split(
-        data, y, test_size=sp, shuffle=False)
-        #print(np.array(X_train).shape)
+        data, y, test_size=0.30, shuffle=False)
+        
+        X_val, X_test, y_val, y_test = train_test_split(
+        X_test, y_test, test_size=0.66, shuffle=False)
+        
         return X_train, X_test, y_train, y_test, X_val, y_val
 
 def rescale_resize(data,shape):
