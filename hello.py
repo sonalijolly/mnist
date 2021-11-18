@@ -10,7 +10,7 @@ app = Flask(__name__)
 def hello_world():
     return "<p>Hello, World!</p>"
 
-best_model_path = "/home/sonali/MLOPs/Mnist/mnist/models/s_8_tt_0.25_val_0.25_gamma0.01/model.joblib"
+best_model_path = "/home/sonali/MLops/mnist/models/s_1_tt_0.25_gamma_0.001/model.joblib"
 
 @app.route("/predict", methods = ['POST'])
 def predict():
