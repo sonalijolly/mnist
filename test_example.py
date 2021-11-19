@@ -134,9 +134,41 @@ def test_digit_correct_2():
 
      print(pred[0])
      assert pred[0]==2
+def test_digit_correct_3():
+     treeclassifier = load(treeclassifier_model)
+     images_0=digits.images[digits.target==3]
+     eg=np.array(images_0[0]).reshape(1,-1)
+     pred=clf.predict(eg)
+
+     print(pred[0])
+     assert pred[0]==3
+def test_digit_correct_4():
+     treeclassifier = load(treeclassifier_model)
+     images_0=digits.images[digits.target==4]
+     eg=np.array(images_0[0]).reshape(1,-1)
+     pred=clf.predict(eg)
+
+     print(pred[0])
+     assert pred[0]==4
+def test_digit_correct_5():
+     treeclassifier = load(treeclassifier_model)
+     images_0=digits.images[digits.target==5]
+     eg=np.array(images_0[0]).reshape(1,-1)
+     pred=clf.predict(eg)
+
+     print(pred[0])
+     assert pred[0]==5
+def test_digit_correct_6():
+     treeclassifier = load(treeclassifier_model)
+     images_0=digits.images[digits.target==6]
+     eg=np.array(images_0[0]).reshape(1,-1)
+     pred=clf.predict(eg)
+
+     print(pred[0])
+     assert pred[0]==6
 
 
-#min accuracy
+#min accuracy--bonus
 clf = load(best_model_path)
 pred=clf.predict(X_test)
 min_acc_req=0.70
