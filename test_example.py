@@ -120,9 +120,24 @@ def test_digit_correct_0():
      assert pred[0]==0
 
 
-
+#min accuracy
+clf = load(best_model_path)
+pred=clf.predict(X_test)
 min_acc_req=0.70
+
+y_true = y_test
+y_pred = pred
+target_names = [0,1,2,3,4,5,6,7,8,9]
+#Get the confusion matrix
+cm = confusion_matrix(y_true, y_pred)
+
+#Now the normalize the diagonal entries
+cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+
+lst=cm.diagonal()
+lst=lst.tolist()
 def accuracy_check():
+     assert lst[0] > min_acc_req
     
 
 
