@@ -118,6 +118,22 @@ def test_digit_correct_0():
 
      print(pred[0])
      assert pred[0]==0
+def test_digit_correct_1():
+     treeclassifier = load(treeclassifier_model)
+     images_0=digits.images[digits.target==1]
+     eg=np.array(images_0[0]).reshape(1,-1)
+     pred=clf.predict(eg)
+
+     print(pred[0])
+     assert pred[0]==1
+def test_digit_correct_2():
+     treeclassifier = load(treeclassifier_model)
+     images_0=digits.images[digits.target==2]
+     eg=np.array(images_0[0]).reshape(1,-1)
+     pred=clf.predict(eg)
+
+     print(pred[0])
+     assert pred[0]==2
 
 
 #min accuracy
